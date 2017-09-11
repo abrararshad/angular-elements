@@ -4,6 +4,7 @@ import { RouterModule} from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { LayoutComponent } from './layout/layout.component';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AngularFireModule } from 'angularfire2'
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -11,8 +12,8 @@ import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { DataService } from './services/data.service';
-
 import { ElementsModule } from './elements/elements.module';
+
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ElementsModule } from './elements/elements.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,

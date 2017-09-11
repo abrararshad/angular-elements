@@ -5,6 +5,14 @@ import * as jQuery from 'jquery';
 import * as Sortable from 'sortablejs';
 import * as _ from 'underscore';
 
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
+
 import { DataService } from '../../services/data.service';
 import { elementI } from '../../interfaces/element';
 
@@ -12,13 +20,27 @@ import { elementI } from '../../interfaces/element';
   selector: 'elements-list',
   moduleId: module.id,
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+  styleUrls: ['./list.component.scss'],
+  animations: [
+    trigger('flyInOut', [
+        state('void', style({})),
+        state('in', style({transform: 'translateX(0)'})),
+        transition('void => in', [
+          style({transform: 'translateX(-100%)'}),
+          animate(100)
+        ]),
+        transition('in => void', [
+          animate(100, style({transform: 'translateX(100%)'}))
+        ])
+      ]) 
+  ]  
 })
 export class ListComponent implements OnInit {
   @ViewChild('list') listRef: ElementRef;
 
   public elements: FirebaseListObservable<elementI[]>;
   public list_message: string; 
+  public anim_state: string = 'in';
 
   constructor(private dataService: DataService, private router: Router) {
 
@@ -27,6 +49,10 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.elements = this.dataService.fetchElements();
     this.elements.subscribe(data => {
+      setTimeout(()=>{
+          this.anim_state = '';
+        }, 2000);
+
       if(_.size(data) < 1) 
         this.list_message = 'There are currently no elements created';
       else
@@ -55,6 +81,13 @@ export class ListComponent implements OnInit {
       }
     });
 
+    this.dataService.updatesEmitter.subscribe(update => {
+      if(update['action'] == 'added' || update['action'] == 'removed') {
+        this.anim_state = 'in';
+      }
+    });
+
   }
+
 
 }

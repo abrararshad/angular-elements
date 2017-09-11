@@ -1,6 +1,6 @@
 <ul class="element-list" #list>
   <li *ngFor="let element of elements | async" [routerLink]="['element', element.id]" routerLinkActive="active"
-    [attr.data-id]="element.id">
+    [attr.data-id]="element.id" [@flyInOut]="anim_state">
     <div class="color-strip" [ngStyle]="{backgroundColor:element.color}"></div>
     <div class="element-content">
       <span class="id"> #{{element.id | slice:0:5}} </span>
